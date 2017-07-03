@@ -65,14 +65,20 @@ cross_entropy = tf.reduce_mean( tf.nn.softmax_cross_entropy_with_logits(labels=y
 # use the steepest gradient descent algorithm to minimize the loss function
 train_step = tf.train.GradientDescentOptimizer(0.5).minimize(cross_entropy)
 
+# Test trained model
+correct_prediction = tf.equal(tf.argmax(y,1), tf.argmax(y_,1))
+accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
+
 
 # Train
 for _ in range(1000):
 	batch_xs, batch_ys = mnist.train.next_batch(100)
 	sess.run(train_step, feed_dict={x: batch_xs, y_: batch_ys})
+	if _%100==0:
+            curr_loss = sess.run(cross_entropy, {x:mnist.test.images, y_:mnist.test.labels})
+            curr_acc = sess.run(accuracy, feed_dict={x: mnist.test.images, y_: mnist.test.labels})
+            print("Training step: %s loss: %s accuracy: %s"%(_, curr_loss,curr_acc))
 
-# Test trained model
-correct_prediction = tf.equal(tf.argmax(y,1), tf.argmax(y_,1))
-accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
-print("Accuracy of the model is: ",sess.run(accuracy, feed_dict={x: mnist.test.images, y_: mnist.test.labels}))
+
+print("Accuracy of the model is after 1000 batch trainings: ",sess.run(accuracy, feed_dict={x: mnist.test.images, y_: mnist.test.labels}))
 
