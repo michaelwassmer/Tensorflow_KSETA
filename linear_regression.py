@@ -55,8 +55,8 @@ correlation = np.corrcoef(Ws,bs)
 
 print correlation
 print correlation[0,1]
-plt.plot(x_train,y_train_meas,'ro')
-
+#plt.plot(x_train,y_train_meas,'ro')
+plt.errorbar(x_train,y_train_meas,xerr=0.,yerr=0.2,'ro')
 W_ = float(Ws[0])
 b_ = float(bs[0])
 plt.plot(x_train,[W_*x_+b_ for x_ in x_train],'-')
