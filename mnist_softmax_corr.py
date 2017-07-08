@@ -4,11 +4,15 @@
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
-from tensorflow.examples.tutorials.mnist import input_data
 import matplotlib.pyplot as plt
 import numpy as np
 import random as ran
 import tensorflow as tf
+
+# Import data
+from tensorflow.examples.tutorials.mnist import input_data
+mnist = input_data.read_data_sets("MNIST_data/", one_hot=True)
+
 
 # function to return the tensor containing the training images (x_train) and the tensor containing the training labels (y_label)
 def TRAIN_SIZE(num):
@@ -58,9 +62,6 @@ def display_compare(num):
     plt.title('Prediction: %d Label: %d' % (prediction, label))
     plt.imshow(x_train.reshape([28,28]), cmap=plt.get_cmap('gray_r'))
     plt.show()
-
-# Import data
-mnist = input_data.read_data_sets("MNIST_data/", one_hot=True)
 
 sess = tf.InteractiveSession()
 
