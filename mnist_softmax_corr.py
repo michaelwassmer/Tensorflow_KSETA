@@ -83,7 +83,7 @@ x_test, y_test = TEST_SIZE(10000)
 # the loss function is chosen to be the cross entropy between the target and the models prediction
 cross_entropy = tf.reduce_mean( tf.nn.softmax_cross_entropy_with_logits(labels=y_,logits=y))
 # learning rate of minimization rate for the GradientDescentOptimizer
-learning_rate = 0.5
+learning_rate = 1.0
 # use the steepest gradient descent algorithm to minimize the loss function
 train_step = tf.train.GradientDescentOptimizer(learning_rate).minimize(cross_entropy)
 
@@ -138,6 +138,7 @@ for i in range(10):
     weight = sess.run(W)[:,i]
     plt.title(i)
     plt.imshow(weight.reshape([28,28]), cmap=plt.get_cmap('seismic'))
+    plt.colorbar()
     frame1 = plt.gca()
     frame1.axes.get_xaxis().set_visible(False)
     frame1.axes.get_yaxis().set_visible(False)
