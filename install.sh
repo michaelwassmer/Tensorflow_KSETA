@@ -23,11 +23,11 @@ source bin/activate
 pip install --upgrade tensorflow
 pip install --upgrade scipy
 pip install --upgrade matplotlib
-pip install --upgrade rootpy
-NOTMVA=1 pip2 install --upgrade  root_numpy
-pip install pandas
-pip install tables
-pip install scikit-learn
+#pip install --upgrade rootpy
+#NOTMVA=1 pip2 install --upgrade  root_numpy
+#pip install pandas
+#pip install tables
+#pip install scikit-learn
 cd ..
 echo "-------------------------------------------------------------------------------------------------"
 echo "executing smallest tensorflow test program"
