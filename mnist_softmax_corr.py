@@ -83,7 +83,7 @@ x_test, y_test = TEST_SIZE(10000)
 # the loss function is chosen to be the cross entropy between the target and the models prediction
 cross_entropy = tf.reduce_mean( tf.nn.softmax_cross_entropy_with_logits(labels=y_,logits=y))
 # learning rate of minimization rate for the GradientDescentOptimizer
-learning_rate = 1.0
+learning_rate = 0.2
 # use the steepest gradient descent algorithm to minimize the loss function
 train_step = tf.train.GradientDescentOptimizer(learning_rate).minimize(cross_entropy)
 
@@ -100,8 +100,8 @@ display_digit(ran.randint(0, x_train.shape[0]))
 display_mult_flat(0,500)
 
 # set the number of training epochs and the batch size for the single trainings
-training_epochs=1000
-batch_size=100
+training_epochs=500
+batch_size=200
 
 # Train
 loss_test_=[]
