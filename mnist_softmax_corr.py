@@ -35,7 +35,7 @@ def TEST_SIZE(num):
     print('')
     return x_test, y_test
 # function to display a random image of the training data
-def display_digit(num):
+def display_digit(num,x_train,y_train):
     print(y_train[num])
     label = y_train[num].argmax(axis=0)
     image = x_train[num].reshape([28,28])
@@ -43,7 +43,7 @@ def display_digit(num):
     plt.imshow(image, cmap=plt.get_cmap('gray_r'))
     plt.show()
 # function to flatten the training images and show the image vectors corresponding to the images 
-def display_mult_flat(start, stop):
+def display_mult_flat(start, stop, x_train):
     images = x_train[start].reshape([1,784])
     for i in range(start+1,stop):
         images = np.concatenate((images, x_train[i].reshape([1,784])))
@@ -53,8 +53,8 @@ def display_mult_flat(start, stop):
 # display a random image and compare the predicted to the true value
 def display_compare(num):
     # THIS WILL LOAD ONE TRAINING EXAMPLE
-    x_train = mnist.train.images[num,:].reshape(1,784)
-    y_train = mnist.train.labels[num,:]
+    x_train = mnist.test.images[num,:].reshape(1,784)
+    y_train = mnist.test.labels[num,:]
     # THIS GETS OUR LABEL AS A INTEGER
     label = y_train.argmax()
     # THIS GETS OUR PREDICTION AS A INTEGER
@@ -84,7 +84,7 @@ x_test, y_test = TEST_SIZE(10000)
 # the loss function is chosen to be the cross entropy between the target and the models prediction
 cross_entropy = tf.reduce_mean( tf.nn.softmax_cross_entropy_with_logits(labels=y_,logits=y))
 # learning rate of minimization rate for the GradientDescentOptimizer
-learning_rate = 0.2
+learning_rate = 0.5
 # use the steepest gradient descent algorithm to minimize the loss function
 train_step = tf.train.GradientDescentOptimizer(learning_rate).minimize(cross_entropy)
 
@@ -95,39 +95,45 @@ accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
 # display random image
 print("displaying random image now")
 print("one hot vector of random image")
-display_digit(ran.randint(0, x_train.shape[0]))
+display_digit(ran.randint(0, x_train.shape[0]),x_train,y_train)
 
 # flattened form of the images
-display_mult_flat(0,500)
+display_mult_flat(0,500,x_train)
 
 # set the number of training epochs and the batch size for the single trainings
-training_epochs=500
-batch_size=200
+training_epochs=1000
+batch_size=100
 
 # Train
-loss_test_=[]
-loss_train_=[]
+loss_test=[]
+loss_train=[]
+acc_test=[]
+acc_train=[]
 epoch=[]
 for _ in range(training_epochs):
         #do batch learning
 	batch_xs, batch_ys = mnist.train.next_batch(batch_size)
 	sess.run(train_step, feed_dict={x: batch_xs, y_: batch_ys})
 	if _%10==0:
-            loss_test = sess.run(cross_entropy, {x:x_test, y_:y_test})
-            loss_train = sess.run(cross_entropy, {x:x_train, y_:y_train})
-            loss_test_.append(loss_test)
-            loss_train_.append(loss_train)
             epoch.append(_)
-            curr_acc = sess.run(accuracy, feed_dict={x: mnist.test.images, y_: mnist.test.labels})
-            print("Training step: %s loss: %s accuracy: %s"%(_, loss_test,curr_acc))
+            curr_acc,curr_loss = sess.run([accuracy,cross_entropy], feed_dict={x: mnist.test.images, y_: mnist.test.labels})
+            loss_test.append(curr_loss)
+            acc_test.append(curr_acc)
+            print("Training step: %s loss: %s accuracy: %s"%(_, curr_loss,curr_acc))
+            curr_acc,curr_loss = sess.run([accuracy,cross_entropy], feed_dict={x: mnist.train.images, y_: mnist.train.labels})
+            loss_train.append(curr_loss)
+            acc_train.append(curr_acc)
+            print("Training step: %s loss: %s accuracy: %s"%(_, curr_loss,curr_acc))
 
 # plot loss function for test and training sample
-plt.plot(epoch,loss_test_,'r',label='test sample')
-plt.plot(epoch,loss_train_,'b',label='training sample')
+plt.plot(epoch,loss_test,'r',label='loss: test sample')
+plt.plot(epoch,loss_train,'b',label='loss: training sample')
+plt.plot(epoch,acc_test,'--r',label='accuracy: test sample')
+plt.plot(epoch,acc_train,'--b',label='accuracy: training sample')
 plt.legend()
-plt.title("loss function")
+plt.title("loss and accuracy")
 plt.xlabel('training epochs')
-plt.ylabel('loss')
+plt.ylabel('loss function/accuracy')
 plt.show()
 
 print("##################################################################################################################")
@@ -146,7 +152,7 @@ for i in range(10):
 print("showing the weights corresponding to the different possible digits")
 plt.show()
 
-display_compare(ran.randint(0, 55000))
+display_compare(ran.randint(0, 10000))
 
 
 
