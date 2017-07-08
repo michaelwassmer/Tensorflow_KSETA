@@ -119,11 +119,11 @@ for _ in range(training_epochs):
             curr_acc,curr_loss = sess.run([accuracy,cross_entropy], feed_dict={x: mnist.test.images, y_: mnist.test.labels})
             loss_test.append(curr_loss)
             acc_test.append(curr_acc)
-            print("Training step: %s loss: %s accuracy: %s"%(_, curr_loss,curr_acc))
+            print("Training step: %s loss: %s accuracy: %s (test sample)"%(_, curr_loss,curr_acc))
             curr_acc,curr_loss = sess.run([accuracy,cross_entropy], feed_dict={x: mnist.train.images, y_: mnist.train.labels})
             loss_train.append(curr_loss)
             acc_train.append(curr_acc)
-            print("Training step: %s loss: %s accuracy: %s"%(_, curr_loss,curr_acc))
+            print("Training step: %s loss: %s accuracy: %s (train sample)"%(_, curr_loss,curr_acc))
 
 # plot loss function for test and training sample
 plt.plot(epoch,loss_test,'r',label='loss: test sample')
