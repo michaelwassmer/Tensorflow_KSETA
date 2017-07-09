@@ -20,6 +20,7 @@ echo "--------------------------------------------------------------------------
 virtualenv tensorflow_tut
 cd tensorflow_tut
 source bin/activate
+pip install --upgrade pip
 pip install --upgrade tensorflow
 pip install --upgrade scipy
 pip install --upgrade matplotlib
