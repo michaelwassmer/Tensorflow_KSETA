@@ -11,7 +11,7 @@ import tensorflow as tf
 
 # Import data
 from tensorflow.examples.tutorials.mnist import input_data
-mnist = input_data.read_data_sets("MNIST_data/", one_hot=True)
+mnist = input_data.read_data_sets("MNIST_data/", one_hot=True,validation_size=15000)
 
 
 # function to return the tensor containing the training images (x_train) and the tensor containing the training labels (y_label)
@@ -78,7 +78,7 @@ y_ = tf.placeholder(tf.float32, [None, 10])
 tf.global_variables_initializer().run()
 
 # load training and test samples
-x_train, y_train = TRAIN_SIZE(55000)
+x_train, y_train = TRAIN_SIZE(45000)
 x_test, y_test = TEST_SIZE(10000)
 
 # the loss function is chosen to be the cross entropy between the target and the models prediction
@@ -105,10 +105,12 @@ training_epochs=1000
 batch_size=100
 
 # Train
-loss_test=[]
-#loss_train=[]
-acc_test=[]
-#acc_train=[]
+#loss_test=[]
+loss_train=[]
+loss_val=[]
+#acc_test=[]
+acc_train=[]
+acc_val=[]
 epoch=[]
 for _ in range(training_epochs):
         #do batch learning
@@ -116,20 +118,27 @@ for _ in range(training_epochs):
 	sess.run(train_step, feed_dict={x: batch_xs, y_: batch_ys})
 	if _%10==0:
             epoch.append(_)
-            curr_acc,curr_loss = sess.run([accuracy,cross_entropy], feed_dict={x: mnist.test.images, y_: mnist.test.labels})
-            loss_test.append(curr_loss)
-            acc_test.append(curr_acc)
-            print("Training step: %s loss: %s accuracy: %s (test sample)"%(_, curr_loss,curr_acc))
-            #curr_acc,curr_loss = sess.run([accuracy,cross_entropy], feed_dict={x: mnist.train.images, y_: mnist.train.labels})
-            #loss_train.append(curr_loss)
-            #acc_train.append(curr_acc)
-            #print("Training step: %s loss: %s accuracy: %s (train sample)"%(_, curr_loss,curr_acc))
+            #curr_acc,curr_loss = sess.run([accuracy,cross_entropy], feed_dict={x: mnist.test.images, y_: mnist.test.labels})
+            #loss_test.append(curr_loss)
+            #acc_test.append(curr_acc)
+            #print("Training step: %s loss: %s accuracy: %s (test sample)"%(_, curr_loss,curr_acc))
+            curr_acc,curr_loss = sess.run([accuracy,cross_entropy], feed_dict={x: mnist.train.images, y_: mnist.train.labels})
+            loss_train.append(curr_loss)
+            acc_train.append(curr_acc)
+            print("Training step: %s loss: %s accuracy: %s (train sample)"%(_, curr_loss,curr_acc))
+            curr_acc,curr_loss = sess.run([accuracy,cross_entropy], feed_dict={x: mnist.validation.images, y_: mnist.validation.labels})
+            loss_val.append(curr_loss)
+            acc_val.append(curr_acc)
+            print("Training step: %s loss: %s accuracy: %s (val sample)"%(_, curr_loss,curr_acc))
+
 
 # plot loss function for test and training sample
-plt.plot(epoch,loss_test,'r',label='loss: test sample')
-#plt.plot(epoch,loss_train,'b',label='loss: training sample')
-plt.plot(epoch,acc_test,'--r',label='accuracy: test sample')
-#plt.plot(epoch,acc_train,'--b',label='accuracy: training sample')
+#plt.plot(epoch,loss_test,'r',label='loss: test sample')
+plt.plot(epoch,loss_train,'b',label='loss: training sample')
+plt.plot(epoch,loss_val,'g',label='loss: validation sample')
+#plt.plot(epoch,acc_test,'--r',label='accuracy: test sample')
+plt.plot(epoch,acc_train,'--b',label='accuracy: training sample')
+plt.plot(epoch,acc_val,'--g',label='accuracy: validation sample')
 plt.legend()
 plt.title("loss and accuracy")
 plt.xlabel('training epochs')
