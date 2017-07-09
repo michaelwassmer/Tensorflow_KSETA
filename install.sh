@@ -13,11 +13,11 @@
 echo "-------------------------------------------------------------------------------------------------"
 echo "installing python-pip and virtualenv"
 echo "-------------------------------------------------------------------------------------------------"
-sudo apt-get install python-pip python-dev python-virtualenv
+sudo apt-get install python-pip python-dev python-virtualenv python-tk
 echo "-------------------------------------------------------------------------------------------------"
 echo "starting setup of virtual environment and tensorflow installation"
 echo "-------------------------------------------------------------------------------------------------"
-virtualenv tensorflow_tut
+virtualenv tensorflow_tut --system-site-packages
 cd tensorflow_tut
 source bin/activate
 pip install --upgrade pip
