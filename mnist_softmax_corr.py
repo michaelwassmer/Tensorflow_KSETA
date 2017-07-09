@@ -106,9 +106,9 @@ batch_size=100
 
 # Train
 loss_test=[]
-loss_train=[]
+#loss_train=[]
 acc_test=[]
-acc_train=[]
+#acc_train=[]
 epoch=[]
 for _ in range(training_epochs):
         #do batch learning
@@ -120,16 +120,16 @@ for _ in range(training_epochs):
             loss_test.append(curr_loss)
             acc_test.append(curr_acc)
             print("Training step: %s loss: %s accuracy: %s (test sample)"%(_, curr_loss,curr_acc))
-            curr_acc,curr_loss = sess.run([accuracy,cross_entropy], feed_dict={x: mnist.train.images, y_: mnist.train.labels})
-            loss_train.append(curr_loss)
-            acc_train.append(curr_acc)
-            print("Training step: %s loss: %s accuracy: %s (train sample)"%(_, curr_loss,curr_acc))
+            #curr_acc,curr_loss = sess.run([accuracy,cross_entropy], feed_dict={x: mnist.train.images, y_: mnist.train.labels})
+            #loss_train.append(curr_loss)
+            #acc_train.append(curr_acc)
+            #print("Training step: %s loss: %s accuracy: %s (train sample)"%(_, curr_loss,curr_acc))
 
 # plot loss function for test and training sample
 plt.plot(epoch,loss_test,'r',label='loss: test sample')
-plt.plot(epoch,loss_train,'b',label='loss: training sample')
+#plt.plot(epoch,loss_train,'b',label='loss: training sample')
 plt.plot(epoch,acc_test,'--r',label='accuracy: test sample')
-plt.plot(epoch,acc_train,'--b',label='accuracy: training sample')
+#plt.plot(epoch,acc_train,'--b',label='accuracy: training sample')
 plt.legend()
 plt.title("loss and accuracy")
 plt.xlabel('training epochs')
