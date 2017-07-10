@@ -61,6 +61,7 @@ def display_compare(num):
     prediction = sess.run(y, feed_dict={x: x_train}).argmax()
     plt.title('Prediction: %d Label: %d' % (prediction, label))
     plt.imshow(x_train.reshape([28,28]), cmap=plt.get_cmap('gray_r'))
+    plt.savefig("mnist_exmaple_prediction.pdf")
     plt.show()
 
 sess = tf.InteractiveSession()
@@ -143,6 +144,7 @@ plt.legend()
 plt.title("loss and accuracy")
 plt.xlabel('training epochs')
 plt.ylabel('loss function/accuracy')
+plt.savefig("mnist_loss_and_accuracy.pdf")
 plt.show()
 
 print("##################################################################################################################")
@@ -159,6 +161,7 @@ for i in range(10):
     frame1.axes.get_xaxis().set_visible(False)
     frame1.axes.get_yaxis().set_visible(False)
 print("showing the weights corresponding to the different possible digits")
+plt.savefig("mnist_weights.pdf")
 plt.show()
 
 display_compare(ran.randint(0, 10000))
