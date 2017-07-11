@@ -47,9 +47,9 @@ for k in range(200):
     sess.run(init)
     #add the random gaussian error to the nominal y values
     y_train_mc= [np.random.normal(0.,0.05*abs(y_train[i]))+np.random.normal(0.,0.1)+y_train[i] for i in range(len(y_train))]
-    for i in range(500):# do 1000 iterations of the gradient descent to numcerically minimize the loss function
+    for l in range(500):# do 1000 iterations of the gradient descent to numcerically minimize the loss function
         sess.run(train, {x:x_train, y:y_train_mc})
-        if i%100==0:
+        if l%100==0:
             curr_W, curr_b, curr_loss = sess.run([W, b, loss], {x:x_train, y:y_train_mc})
             #print("Training step: %s W: %s b: %s loss: %s"%(i,curr_W, curr_b, curr_loss))
     # evaluate training accuracy of toys
