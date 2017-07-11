@@ -1,8 +1,6 @@
 # example for MNIST with TensorFlow
 # adapted from TensorFlow MNIST Tutorial on TensorFlow Webpage and from https://www.oreilly.com/learning/not-another-mnist-tutorial-with-tensorflow
 
-from __future__ import absolute_import
-from __future__ import division
 from __future__ import print_function
 import matplotlib.pyplot as plt
 import numpy as np
@@ -11,6 +9,7 @@ import tensorflow as tf
 
 # Import data
 from tensorflow.examples.tutorials.mnist import input_data
+# we use 45000 training images and 15000 validation images
 mnist = input_data.read_data_sets("MNIST_data/", one_hot=True,validation_size=15000)
 
 
@@ -84,7 +83,7 @@ x_test, y_test = TEST_SIZE(10000)
 
 # the loss function is chosen to be the cross entropy between the target and the models prediction
 cross_entropy = tf.reduce_mean( tf.nn.softmax_cross_entropy_with_logits(labels=y_,logits=y))
-# learning rate of minimization rate for the GradientDescentOptimizer
+# learning rate/minimization rate for the GradientDescentOptimizer
 learning_rate = 0.5
 # use the steepest gradient descent algorithm to minimize the loss function
 train_step = tf.train.GradientDescentOptimizer(learning_rate).minimize(cross_entropy)
@@ -106,10 +105,8 @@ training_epochs=1000
 batch_size=100
 
 # Train
-#loss_test=[]
 loss_train=[]
 loss_val=[]
-#acc_test=[]
 acc_train=[]
 acc_val=[]
 epoch=[]
@@ -119,10 +116,6 @@ for _ in range(training_epochs):
 	sess.run(train_step, feed_dict={x: batch_xs, y_: batch_ys})
 	if _%10==0:
             epoch.append(_)
-            #curr_acc,curr_loss = sess.run([accuracy,cross_entropy], feed_dict={x: mnist.test.images, y_: mnist.test.labels})
-            #loss_test.append(curr_loss)
-            #acc_test.append(curr_acc)
-            #print("Training step: %s loss: %s accuracy: %s (test sample)"%(_, curr_loss,curr_acc))
             curr_acc,curr_loss = sess.run([accuracy,cross_entropy], feed_dict={x: mnist.train.images, y_: mnist.train.labels})
             loss_train.append(curr_loss)
             acc_train.append(curr_acc)
@@ -134,10 +127,8 @@ for _ in range(training_epochs):
 
 
 # plot loss function for test and training sample
-#plt.plot(epoch,loss_test,'r',label='loss: test sample')
 plt.plot(epoch,loss_train,'b',label='loss: training sample')
 plt.plot(epoch,loss_val,'g',label='loss: validation sample')
-#plt.plot(epoch,acc_test,'--r',label='accuracy: test sample')
 plt.plot(epoch,acc_train,'--b',label='accuracy: training sample')
 plt.plot(epoch,acc_val,'--g',label='accuracy: validation sample')
 plt.legend()
