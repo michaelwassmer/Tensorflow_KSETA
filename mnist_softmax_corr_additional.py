@@ -91,7 +91,7 @@ x_test, y_test = TEST_SIZE(10000)
 # the loss function is chosen to be the cross entropy between the target and the models prediction
 cross_entropy = tf.reduce_mean( tf.nn.softmax_cross_entropy_with_logits(labels=y_,logits=y))
 # learning rate of minimization rate for the GradientDescentOptimizer
-learning_rate = 0.02
+learning_rate = 0.007
 # use the steepest gradient descent algorithm to minimize the loss function
 train_step = tf.train.AdamOptimizer(learning_rate).minimize(cross_entropy)
 
@@ -102,14 +102,14 @@ accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
 # display random image
 print("displaying random image now")
 print("one hot vector of random image")
-display_digit(ran.randint(0, x_train.shape[0]),x_train,y_train)
+#display_digit(ran.randint(0, x_train.shape[0]),x_train,y_train)
 
 # flattened form of the images
-display_mult_flat(0,500,x_train)
+#display_mult_flat(0,500,x_train)
 
 # set the number of training epochs and the batch size for the single trainings
-training_epochs=2000
-batch_size=150
+training_epochs=10000
+batch_size=40
 tf.global_variables_initializer().run()
 # Train
 #loss_test=[]
@@ -138,7 +138,7 @@ for _ in range(training_epochs):
             acc_val.append(curr_acc)
             print("Training step: %s loss: %s accuracy: %s (val sample)"%(_, curr_loss,curr_acc))
 
-
+"""
 # plot loss function for test and training sample
 #plt.plot(epoch,loss_test,'r',label='loss: test sample')
 plt.plot(epoch,loss_train,'b',label='loss: training sample')
@@ -152,7 +152,7 @@ plt.xlabel('training epochs')
 plt.ylabel('loss function/accuracy')
 plt.savefig("mnist_loss_and_accuracy.pdf")
 plt.show()
-
+"""
 print("##################################################################################################################")
 print("Accuracy of the model after %d batch trainings with a batch size of %d is %s "%(training_epochs,batch_size,sess.run(accuracy, feed_dict={x: mnist.test.images, y_: mnist.test.labels})))
 print("##################################################################################################################")
@@ -170,7 +170,7 @@ print("showing the weights corresponding to the different possible digits")
 plt.savefig("mnist_weights.pdf")
 plt.show()
 """
-display_compare(ran.randint(0, 10000))
+#display_compare(ran.randint(0, 10000))
 
 
 
