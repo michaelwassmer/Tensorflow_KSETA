@@ -70,12 +70,16 @@ sess = tf.InteractiveSession()
 # a 2d tensor for the input batches: for each image 784 pixels and the number of training objects in the batch is arbitrary, therefore the keyword "None"
 x = tf.placeholder(tf.float32, [None, 784])
 # the weights in shape of a 784x10 matrix and the biases for each output class
-W = tf.Variable(tf.random_normal([784, 800]))
-W_neu = tf.Variable(tf.random_normal([800,10]))
-b = tf.Variable(tf.random_normal([800]))
-b_neu = tf.Variable(tf.random_normal([10]))
+W_layer1 = tf.Variable(tf.random_normal([784, 256]))
+W_layer2 = tf.Variable(tf.random_normal([256,256]))
+W_layer3 = tf.Variable(tf.random_normal([256,10]))
+b_layer1 = tf.Variable(tf.random_normal([256]))
+b_layer2 = tf.Variable(tf.random_normal([256]))
+b_layer3 = tf.Variable(tf.random_normal([10]))
 # the linear regression model as a matrix multiplication of the weight matrix with the input vector and the final addition of the biases to each output node
-y = tf.matmul(tf.nn.sigmoid(tf.matmul(x, W) + b),W_neu)+b_neu
+y_layer1 = tf.nn.sigmoid(tf.matmul(x, W_layer1) + b_layer1)
+y_layer2 = tf.nn.sigmoid(tf.matmul(y_layer1, W_layer2) + b_layer2)
+y = tf.matmul(y_layer2,W_layer3)+b_layer3
 # another 2d tensor for the target output
 y_ = tf.placeholder(tf.float32, [None, 10])
 
@@ -87,7 +91,7 @@ x_test, y_test = TEST_SIZE(10000)
 # the loss function is chosen to be the cross entropy between the target and the models prediction
 cross_entropy = tf.reduce_mean( tf.nn.softmax_cross_entropy_with_logits(labels=y_,logits=y))
 # learning rate of minimization rate for the GradientDescentOptimizer
-learning_rate = 0.01
+learning_rate = 0.02
 # use the steepest gradient descent algorithm to minimize the loss function
 train_step = tf.train.AdamOptimizer(learning_rate).minimize(cross_entropy)
 
@@ -105,7 +109,7 @@ display_mult_flat(0,500,x_train)
 
 # set the number of training epochs and the batch size for the single trainings
 training_epochs=2000
-batch_size=100
+batch_size=150
 tf.global_variables_initializer().run()
 # Train
 #loss_test=[]
@@ -152,7 +156,7 @@ plt.show()
 print("##################################################################################################################")
 print("Accuracy of the model after %d batch trainings with a batch size of %d is %s "%(training_epochs,batch_size,sess.run(accuracy, feed_dict={x: mnist.test.images, y_: mnist.test.labels})))
 print("##################################################################################################################")
-
+"""
 for i in range(10):
     plt.subplot(2, 5, i+1)
     weight = sess.run(W)[:,i]
@@ -165,7 +169,7 @@ for i in range(10):
 print("showing the weights corresponding to the different possible digits")
 plt.savefig("mnist_weights.pdf")
 plt.show()
-
+"""
 display_compare(ran.randint(0, 10000))
 
 
